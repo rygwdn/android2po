@@ -347,19 +347,19 @@ def read_xml(file, language=None, warnfunc=dummy_warn):
             continue
 
         # Ignore elements we cannot or should not process
-        if not 'msgid' in tag.attrib:
+        if not 'name' in tag.attrib:
             comment = []
             continue
         if tag.attrib.get('translatable') == 'false':
             comment = []
             continue
 
-        name = tag.attrib['msgid']
-        if name in result:
-            warnfunc('Duplicate resource id found: %s, ignoring.' % name,
-                     'warning')
-            comment = []
-            continue
+        name = tag.attrib['name']
+#        if name in result:
+#            warnfunc('Duplicate resource id found: %s, ignoring.' % name,
+#                     'warning')
+#            comment = []
+#            continue
 
         if tag.tag == 'string':
             try:
@@ -863,7 +863,7 @@ def write_xml(tree, warnfunc=dummy_warn):
         if isinstance(value, StringArray):
             # string-array - first, sort by index
             array_el = etree.Element('string-array')
-            array_el.attrib['msgid'] = name
+            array_el.attrib['name'] = name
             for i, v in enumerate(value):
                 item_el = write_to_dom(
                     'item', v, '"%s" index %d' % (name, i), namespaces_used,
@@ -873,7 +873,7 @@ def write_xml(tree, warnfunc=dummy_warn):
         elif isinstance(value, Plurals):
             # plurals
             plural_el = etree.Element('plurals')
-            plural_el.attrib['msgid'] = name
+            plural_el.attrib['name'] = name
             for k in sorted(value, cmp=sort_plural_keywords):
                 item_el = write_to_dom(
                     'item', value[k], '"%s" quantity %s' % (name, k),
@@ -885,7 +885,7 @@ def write_xml(tree, warnfunc=dummy_warn):
             # standard string
             string_el = write_to_dom(
                 'string', value, '"%s"' % name, namespaces_used, warnfunc)
-            string_el.attrib['msgid'] = name
+            string_el.attrib['name'] = name
             root_tags.append(string_el)
 
     # Generate the root element, define the namespaces that have been
