@@ -347,14 +347,14 @@ def read_xml(file, language=None, warnfunc=dummy_warn):
             continue
 
         # Ignore elements we cannot or should not process
-        if not 'name' in tag.attrib:
+        if not 'msgid' in tag.attrib:
             comment = []
             continue
         if tag.attrib.get('translatable') == 'false':
             comment = []
             continue
 
-        name = tag.attrib['name']
+        name = tag.attrib['msgid']
         if name in result:
             warnfunc('Duplicate resource id found: %s, ignoring.' % name,
                      'warning')
